@@ -1,0 +1,101 @@
+PPU-f4c713c703422fec291923adf79305b5626d171b:
+  "Madden 25: 750-prospect draft class import":
+    Games:
+      "Madden NFL 25":
+        BLUS31178: [ 01.00 ]
+    Author: "madden25-ps3-draft-patch"
+    Notes: "Imports up to 750 NCAA Football 14 draft prospects instead of 300 and gives franchise mode the memory for them. Installed by madden25-draft-patch.exe, which also prepares the game files and franchise saves (github.com/ericfox5/madden25-ps3-draft-patch)."
+    Patch Version: 2.2
+    Patch:
+      - [ be32, 0x004660a0, 0x2c83012c ] # shared map for r3: 300->750, 3100->3550, 9600->24000, blr
+      - [ be32, 0x004660a4, 0x2f030c1c ]
+      - [ be32, 0x004660a8, 0x2f832580 ]
+      - [ be32, 0x004660ac, 0x4cc6d382 ]
+      - [ be32, 0x004660b0, 0x40860008 ]
+      - [ be32, 0x004660b4, 0x386301c2 ]
+      - [ be32, 0x004660b8, 0x409e0008 ]
+      - [ be32, 0x004660bc, 0x38633840 ]
+      - [ be32, 0x004660c0, 0x4e800020 ]
+      - [ be32, 0x004660c4, 0x807e0008 ] # hook A: lwz r3,8(r30) (table max capacity), b map
+      - [ be32, 0x004660c8, 0x4bffffd8 ]
+      - [ be32, 0x004660cc, 0x807e001c ] # hook C: lwz r3,0x1c(r30) (rows allocated up front), b map
+      - [ be32, 0x004660d0, 0x4bffffd0 ]
+      - [ be32, 0x004660d4, 0x809f0008 ] # hook B: lwz r4,8(r31) + map
+      - [ be32, 0x004660d8, 0x2c84012c ]
+      - [ be32, 0x004660dc, 0x2f040c1c ]
+      - [ be32, 0x004660e0, 0x2f842580 ]
+      - [ be32, 0x004660e4, 0x4cc6d382 ]
+      - [ be32, 0x004660e8, 0x40860008 ]
+      - [ be32, 0x004660ec, 0x388401c2 ]
+      - [ be32, 0x004660f0, 0x409e0008 ]
+      - [ be32, 0x004660f4, 0x38843840 ]
+      - [ be32, 0x004660f8, 0x4e800020 ]
+      - [ be32, 0x004660fc, 0xa33b0018 ] # hook D: lhz r25,0x18(r27) (schema capacity when tables load) + map
+      - [ be32, 0x00466100, 0x2c99012c ]
+      - [ be32, 0x00466104, 0x2f190c1c ]
+      - [ be32, 0x00466108, 0x2f992580 ]
+      - [ be32, 0x0046610c, 0x4cc6d382 ]
+      - [ be32, 0x00466110, 0x40860008 ]
+      - [ be32, 0x00466114, 0x3b3901c2 ]
+      - [ be32, 0x00466118, 0x409e0008 ]
+      - [ be32, 0x0046611c, 0x3b393840 ]
+      - [ be32, 0x00466120, 0x4e800020 ]
+      - [ be32, 0x01a24b08, 0x4aa415bd ] # class C max capacity -> hook A
+      - [ be32, 0x01a24b20, 0x4aa415a5 ] # class C max capacity -> hook A
+      - [ be32, 0x01a24d74, 0x4aa41351 ] # class A max capacity -> hook A
+      - [ be32, 0x01a24d88, 0x4aa4133d ] # class A max capacity -> hook A
+      - [ be32, 0x01a24f20, 0x4aa411a5 ] # class B max capacity -> hook A
+      - [ be32, 0x01a24f34, 0x4aa41191 ] # class B max capacity -> hook A
+      - [ be32, 0x01a24b44, 0x4aa41589 ] # class C allocation -> hook C
+      - [ be32, 0x01a24dac, 0x4aa41321 ] # class A allocation -> hook C
+      - [ be32, 0x01a24f58, 0x4aa41175 ] # class B allocation -> hook C
+      - [ be32, 0x009c9418, 0x4ba9ccbd ] # class D max capacity -> hook B
+      - [ be32, 0x01a258a8, 0x4aa40855 ] # table load: capacity = max(schema, stored) -> hook D
+      - [ be32, 0x00029644, 0x83bd001c ] # hook E: lwz r29,0x1c(r29) (list-table internal list size) + map
+      - [ be32, 0x00029648, 0x2c9d012c ]
+      - [ be32, 0x0002964c, 0x2f1d0c1c ]
+      - [ be32, 0x00029650, 0x2f9d2580 ]
+      - [ be32, 0x00029654, 0x4cc6d382 ]
+      - [ be32, 0x00029658, 0x40860008 ]
+      - [ be32, 0x0002965c, 0x3bbd01c2 ]
+      - [ be32, 0x00029660, 0x409e0008 ]
+      - [ be32, 0x00029664, 0x3bbd3840 ]
+      - [ be32, 0x00029668, 0x4e800020 ]
+      - [ be32, 0x0002966c, 0x809d0008 ] # hook F: lwz r4,8(r29) (list-table max size) + map
+      - [ be32, 0x00029670, 0x2c84012c ]
+      - [ be32, 0x00029674, 0x2f040c1c ]
+      - [ be32, 0x00029678, 0x2f842580 ]
+      - [ be32, 0x0002967c, 0x4cc6d382 ]
+      - [ be32, 0x00029680, 0x40860008 ]
+      - [ be32, 0x00029684, 0x388401c2 ]
+      - [ be32, 0x00029688, 0x409e0008 ]
+      - [ be32, 0x0002968c, 0x38843840 ]
+      - [ be32, 0x00029690, 0x4e800020 ]
+      - [ be32, 0x01a32a54, 0x4a5f6bf1 ] # list table 1 internal list -> hook E
+      - [ be32, 0x01a32bf4, 0x4a5f6a51 ] # list table 2 internal list -> hook E
+      - [ be32, 0x01a32dd4, 0x4a5f6871 ] # list table 3 internal list -> hook E
+      - [ be32, 0x01a32a28, 0x4a5f6c45 ] # list table 1 max -> hook F
+      - [ be32, 0x01a32bc8, 0x4a5f6aa5 ] # list table 2 max -> hook F
+      - [ be32, 0x00029694, 0x80be0024 ] # hook G: lwz r5,0x24(r30) (array element count, e.g. the 300-slot draft class list) + map
+      - [ be32, 0x00029698, 0x2c85012c ]
+      - [ be32, 0x0002969c, 0x2f050c1c ]
+      - [ be32, 0x000296a0, 0x2f852580 ]
+      - [ be32, 0x000296a4, 0x4cc6d382 ]
+      - [ be32, 0x000296a8, 0x40860008 ]
+      - [ be32, 0x000296ac, 0x38a501c2 ]
+      - [ be32, 0x000296b0, 0x409e0008 ]
+      - [ be32, 0x000296b4, 0x38a53840 ]
+      - [ be32, 0x000296b8, 0x4e800020 ]
+      - [ be32, 0x01a24b54, 0x4a604b41 ] # class C array element count -> hook G
+      - [ be32, 0x007789d4, 0x38803aa8 ] # post-import draft pass: fixed buffer 0x1780 (300 x 20 bytes) -> 0x3aa8 (750)
+      - [ be32, 0x00778a04, 0x30a33aa8 ] # post-import draft pass: buffer end -> +0x3aa8
+      - [ be32, 0x00777d5c, 0x38803aa8 ] # sibling draft pass: fixed buffer 0x1780 -> 0x3aa8
+      - [ be32, 0x00777d8c, 0x30a33aa8 ] # sibling draft pass: buffer end -> +0x3aa8
+      - [ be32, 0x000f412c, 0x388002ee ] # import limit: lwz r4,0x9c(r29) -> li r4,750
+      - [ be32, 0x000f4188, 0x7ca52a14 ] # position quotas: extsw r5,r5 -> add r5,r5,r5 (double: 600 by position, the other 150 to the best remaining at any position)
+      - [ be32, 0x01c9e1bc, 0x334d5d0a ] # heap config: FeUtility budget 10M -> 13M
+      - [ be32, 0x01c9e3a4, 0x3d31314d ] # heap config: FeUtility (ps3) size 9MB -> 12M
+      - [ be32, 0x01d10744, 0x653d3230 ] # heap config: FranTkRecords 1024K -> 2048K
+      - [ be32, 0x01d10748, 0x34384b2c ] #   (continued)
+      - [ be32, 0x01d10858, 0x3531324b ] # heap config: FranTkRecords2 256K -> 512K
+      - [ be32, 0x0002fcf0, 0x3c800120 ] # boot memory container (BootUtility 7M + FeUtility) 16MB -> 18MB: lis r4,0x100 -> lis r4,0x120
