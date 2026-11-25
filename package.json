@@ -1,6 +1,6 @@
 {
   "name": "madden25-ps3-draft-patch",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "Madden NFL 25 (PS3 / RPCS3): import 750 NCAA Football 14 draft prospects with real college names",

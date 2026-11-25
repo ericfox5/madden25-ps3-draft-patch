@@ -16,7 +16,7 @@ import icon from '../data/draft-class/BLUS31159-DRAFT-FCS2026/ICON0.PNG';
 import sfoFile from '../data/draft-class/BLUS31159-DRAFT-FCS2026/PARAM.SFO';
 import usr from '../data/draft-class/BLUS31159-DRAFT-FCS2026/USR-DATA';
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const DRAFT_FOLDER = 'BLUS31159-DRAFT-FCS2026';
 const draftFiles = { 'HED-DATA': Buffer.from(hed), 'ICON0.PNG': Buffer.from(icon), 'PARAM.SFO': Buffer.from(sfoFile), 'USR-DATA': Buffer.from(usr) };
 

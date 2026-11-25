@@ -4,8 +4,8 @@ PPU-f4c713c703422fec291923adf79305b5626d171b:
       "Madden NFL 25":
         BLUS31178: [ 01.00 ]
     Author: "madden25-ps3-draft-patch"
-    Notes: "Imports up to 750 NCAA Football 14 draft prospects instead of 300 and gives franchise mode the memory for them. Installed by madden25-draft-patch.exe, which also prepares the game files and franchise saves (github.com/ericfox5/madden25-ps3-draft-patch)."
-    Patch Version: 2.2
+    Notes: "Imports up to 750 NCAA Football 14 draft prospects instead of 300 and gives the franchise record pools room for them (inside Madden's stock memory budget, so the same changes also run on a real PS3). Installed by madden25-draft-patch.exe, which also prepares the game files and franchise saves (github.com/ericfox5/madden25-ps3-draft-patch)."
+    Patch Version: 2.3
     Patch:
       - [ be32, 0x004660a0, 0x2c83012c ] # shared map for r3: 300->750, 3100->3550, 9600->24000, blr
       - [ be32, 0x004660a4, 0x2f030c1c ]
@@ -93,9 +93,6 @@ PPU-f4c713c703422fec291923adf79305b5626d171b:
       - [ be32, 0x00777d8c, 0x30a33aa8 ] # sibling draft pass: buffer end -> +0x3aa8
       - [ be32, 0x000f412c, 0x388002ee ] # import limit: lwz r4,0x9c(r29) -> li r4,750
       - [ be32, 0x000f4188, 0x7ca52a14 ] # position quotas: extsw r5,r5 -> add r5,r5,r5 (double: 600 by position, the other 150 to the best remaining at any position)
-      - [ be32, 0x01c9e1bc, 0x334d5d0a ] # heap config: FeUtility budget 10M -> 13M
-      - [ be32, 0x01c9e3a4, 0x3d31314d ] # heap config: FeUtility (ps3) size 9MB -> 12M
       - [ be32, 0x01d10744, 0x653d3230 ] # heap config: FranTkRecords 1024K -> 2048K
       - [ be32, 0x01d10748, 0x34384b2c ] #   (continued)
       - [ be32, 0x01d10858, 0x3531324b ] # heap config: FranTkRecords2 256K -> 512K
-      - [ be32, 0x0002fcf0, 0x3c800120 ] # boot memory container (BootUtility 7M + FeUtility) 16MB -> 18MB: lis r4,0x100 -> lis r4,0x120
