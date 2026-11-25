@@ -3,7 +3,7 @@
 // count in 2^byte(0x26) units; records start 4 * word(0x28) bytes into the TOC and end with offset, stored size, delta.
 // Entries can be archives themselves; an entry path like [1458, 624] walks into one (every level stored).
 import { createHash } from 'node:crypto';
-import { closeSync, existsSync, fstatSync, mkdirSync, openSync, readFileSync, readSync, writeFileSync, writeSync } from 'node:fs';
+import { closeSync, existsSync, fstatSync, ftruncateSync, mkdirSync, openSync, readFileSync, readSync, writeFileSync, writeSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
 export interface Entry { index: number; off: number; csize: number; usize: number }
@@ -95,6 +95,9 @@ export function relocateEntry(archive: string, index: number, bytes: Uint8Array,
     mkdirSync(backupDir, { recursive: true });
     const backup = join(backupDir, `${basename(archive)}.${index}.toc.orig`);
     if (!existsSync(backup)) writeFileSync(backup, JSON.stringify({ at, record: r.toString('hex') }));
+    // already moved by an earlier run and still the last thing in the file: write over it instead of appending again
+    const curOff = num(q, L.offW) * L.unit, curEnd = curOff + num(q + L.offW, L.csW);
+    if (curEnd === fstatSync(fd).size && curOff > L.tocOff + L.tocSize && existsSync(backup) && JSON.parse(readFileSync(backup, 'utf8')).record !== r.toString('hex')) ftruncateSync(fd, curOff);
     const size = fstatSync(fd).size, end = Math.ceil(size / L.unit) * L.unit;
     if (end / L.unit >= 2 ** (8 * L.offW) || bytes.length >= 2 ** (8 * L.csW)) throw new Error('the relocated entry does not fit the TOC field widths');
     if (end > size) writeSync(fd, Buffer.alloc(end - size), 0, end - size, size);
@@ -106,12 +109,18 @@ export function relocateEntry(archive: string, index: number, bytes: Uint8Array,
   if (!readEntry(archive, index).equals(Buffer.from(bytes))) throw new Error(`entry ${index}: relocated bytes do not read back`);
 }
 
-// Undo relocateEntry: put the original TOC record back (the appended bytes stay in the file, unreferenced).
+// Undo relocateEntry: put the original TOC record back. The appended bytes are cut off when they are the end of the file.
 export function unrelocateEntry(archive: string, index: number, backupDir: string): boolean {
   const backup = join(backupDir, `${basename(archive)}.${index}.toc.orig`);
   if (!existsSync(backup)) return false;
   const { at, record } = JSON.parse(readFileSync(backup, 'utf8')) as { at: number; record: string };
   const fd = openSync(archive, 'r+');
-  try { const r = Buffer.from(record, 'hex'); writeSync(fd, r, 0, r.length, at); } finally { closeSync(fd); }
+  try {
+    const L = layout(fd, 0), cur = Buffer.alloc(L.rec); readSync(fd, cur, 0, L.rec, at);
+    const q = L.rec - L.offW - L.csW - L.deltaW, num = (o: number, w: number) => { let v = 0; for (let i = w - 1; i >= 0; i--) v = v * 256 + cur[o + i]!; return v; };
+    const curOff = num(q, L.offW) * L.unit, curEnd = curOff + num(q + L.offW, L.csW);
+    const r = Buffer.from(record, 'hex'); writeSync(fd, r, 0, r.length, at);
+    if (cur.toString('hex') !== record && curEnd === fstatSync(fd).size && curOff > L.tocOff + L.tocSize) ftruncateSync(fd, curOff);
+  } finally { closeSync(fd); }
   return true;
 }

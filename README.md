@@ -22,6 +22,7 @@ Import **750 college prospects** into Connected Franchise instead of 300, with t
 - **750-player draft classes.** Madden normally keeps only the top 300 players from an NCAA Football 14 draft class. With this patch it keeps up to 750.
 - **The right colleges.** Every player shows his real school, including FCS schools Madden never had (Incarnate Word, Stonehill, Lamar and more) and a few Division II and III schools.
 - **More free agents.** Madden deletes extra free agents every offseason. The patch lets it keep twice as many (about 1,150), so undrafted rookies stick around.
+- **Real player photos (optional).** Option 4 downloads current ESPN headshots for the NFL players in your roster and for the draft class prospects, and adds them to the game as portraits. You can add your own too.
 - **A ready-made class.** `FCS2026`: 2026 prospects from FBS, FCS and six Division II / III standouts, built from the [FCS mod](https://fcs-mod.online) for NCAA Football 14.
 
 ## Install
@@ -41,6 +42,18 @@ Windows may warn that the exe is from an unknown publisher (it is not code-signe
 
 A franchise you started **before** installing needs one extra step, before you import the draft class: run the exe again, press **2** and pick the franchise. It is backed up first. New franchises do not need this.
 
+### Real player photos
+
+Run the exe, press **4** (needs internet; the first run takes several minutes). It:
+
+- matches the players in your Madden roster saves and the `FCS2026` prospects to ESPN headshots,
+- turns each photo into a Madden portrait (256 x 256, DXT5) and adds it to the game,
+- points your roster and franchise saves at them (backed up first).
+
+Run it again after you import a draft class into a franchise, so the new rookies get theirs. Players ESPN has no photo for keep the face they had.
+
+**Your own photo:** put `First Last.dds` (256 x 256, DXT5, no mipmaps) or `First Last.png` in a `madden25-custom-portraits` folder inside your RPCS3 folder, then run option 4. Every player with that name gets it.
+
 ### Uninstall
 
 Run the exe, press **3** and type `YES`. The game files, the RPCS3 patch and the draft class go back to how they were. Backups live in `madden25-draft-patch-backups` inside your RPCS3 folder.
@@ -53,6 +66,7 @@ Run the exe, press **3** and type `YES`. The game files, the RPCS3 patch and the
 | Madden's college lists (6 places in `QKL_BOOT`, `QKL_FE2IG`, `QKL_INTERFACE`, `QKL_MISC`) | Correct school for every draft prospect. |
 | New-franchise template (`QKL_MISC`) | Room for 750 prospects, 5,000 players and twice the free agents. |
 | Your saves | Adds the `FCS2026` draft class save. Option 2 grows an older franchise save the same way. |
+| Portraits (option 4, `QKL_BOOT`) | Adds the headshots to Madden's portrait pack and sets them in your roster and franchise saves. |
 
 Nothing from Madden is shipped here. The exe makes each change to your own copy of the game.
 

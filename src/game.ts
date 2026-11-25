@@ -179,7 +179,7 @@ export function patchTemplate(usrdir: string, backupDir: string, log: (s: string
 }
 
 export function restoreGame(usrdir: string, backupDir: string, log: (s: string) => void): void {
-  for (const t of [...collegeTargets(usrdir), { ...TEMPLATE(usrdir), kind: 'frtk' as Kind, what: 'new-franchise template' }]) {
+  for (const t of [...collegeTargets(usrdir), { ...TEMPLATE(usrdir), kind: 'frtk' as Kind, what: 'new-franchise template' }, { file: join(usrdir, 'QKL_BOOT.AST'), index: 56, kind: 'frtk' as Kind, what: 'player portraits' }]) {
     const undone = (typeof t.index === 'number' && unrelocateEntry(t.file, t.index, backupDir)) || restoreEntry(t.file, t.index, backupDir);
     log(`${t.what}: ${undone ? 'restored' : `no backup for entry ${pathName(t.index)} (left as is)`}`);
   }

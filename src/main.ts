@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { createInterface } from 'node:readline';
+import { runPortraits } from './portraits/run.js';
 import { collegeState, collegeTargets, patchColleges, patchTemplate, restoreGame, templateGrown } from './game.js';
 import {
   findMadden, franchises, GROWN_PLAYERS, installDraftClass, installPatch, isRpcs3, patchInstalled, prepareFranchise, removeDraftClass,
@@ -69,6 +70,7 @@ async function main() {
   log('\n  1  Install or update everything');
   log('  2  Prepare a franchise made before this patch');
   log('  3  Uninstall (put Madden back to stock)');
+  log('  4  Real player photos: ESPN headshots for your roster and draft class (needs internet)');
   log('  Q  Quit');
   const pick = (await ask('\nChoose [1]: ')).toLowerCase() || '1';
 
@@ -90,6 +92,14 @@ async function main() {
     const n = Number(await ask('\nWhich franchise? ')); const f = list[n - 1];
     if (!f) { log('Nothing changed.'); return done(); }
     prepareFranchise(f, backupDir, log);
+  } else if (pick === '4') {
+    log('\nThis downloads headshots from ESPN for the players in your Madden roster saves and in the FCS2026 draft class,');
+    log('adds them to the game as portraits and sets them in your roster and franchise saves (all backed up first).');
+    log('Run it again after importing a draft class into a franchise so the new rookies get theirs.');
+    log(`Your own photos: put "First Last.dds" (256x256 DXT5) or "First Last.png" in ${join(rpcs3, 'madden25-custom-portraits')}.`);
+    if ((await ask('Go ahead? [Y/n]: ')).toLowerCase().startsWith('n')) { log('Nothing changed.'); return done(); }
+    await runPortraits({ usrdir, savedata: savedataDirs(rpcs3), backupDir, draftClass: draftFiles['USR-DATA'], customDir: join(rpcs3, 'madden25-custom-portraits'), log });
+    log('\nDone. Start RPCS3 and open a roster or franchise to see them.');
   } else if (pick === '3') {
     if ((await ask('Put the game files, RPCS3 patch and draft class back to stock? Type YES: ')) !== 'YES') { log('Nothing changed.'); return done(); }
     restoreGame(usrdir, backupDir, log);
